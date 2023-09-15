@@ -24,18 +24,6 @@ def create_person():
          print(users.commit())
     return jsonify({'message': 'Person created successfully'}), 201
 
-# Read a person by ID
-# @app.route('/api/<int:user_id>', methods=['GET'])
-# def get_person(user_id):
-#     # id = int(user_id)
-#     connect = sqlite3.connect('database.db')
-#     cursor = connect.cursor()
-#     cursor.execute("SELECT cast(id as integer) FROM Persons WHERE id = ?", (user_id,))
-#     person = cursor.fetchone()
-#     return jsonify({"person": person})
-#     # print(person)
-#     # result = list(map(convertListToObject, person))
-#     # return jsonify({"result": 'result'}), 200
 
 @app.route('/api/<int:user_id>', methods=['GET'])
 def get_person(user_id):
@@ -75,23 +63,68 @@ def get_all_persons():
     result = list(map(convertListToObject, person))
     return jsonify({"result": result}), 200
 
-# Update a person by ID
+
+
+# # Update a person by ID
 @app.route('/api/<int:user_id>', methods=['PUT'])
 def update_person(user_id):
-    # person = Person.query.get_or_404(user_id)
-    data = request.json
-    # person.name = data['name']
-    # person.age = data['age']
-    # db.session.commit()
-    return jsonify({'message': 'Person updated successfully'})
+    try:
+        # Establish a connection to the SQLite database
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
 
-# Delete a person by ID
+        # Retrieve the updated data from the request JSON
+        data = request.json
+        new_name = data.get('name')
+        new_age = data.get('age')
+
+        # Check if the person with the specified user_id exists
+        cursor.execute("SELECT id FROM Persons WHERE id = ?", (user_id,))
+        person = cursor.fetchone()
+
+        if person:
+            # Update the person's information in the database
+            cursor.execute("UPDATE Persons SET name = ?, age = ? WHERE id = ?", (new_name, new_age, user_id))
+            connection.commit()
+            return jsonify({'message': 'Person updated successfully'}), 200
+        else:
+            return jsonify({'message': 'Person not found'}), 404
+
+    except sqlite3.Error as e:
+        # Handle any potential database errors here
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        # Make sure to close the database connection when done
+        connection.close()
+
+# # Delete a person by ID
 @app.route('/api/<int:user_id>', methods=['DELETE'])
 def delete_person(user_id):
-    # person = Person.query.get_or_404(user_id)
-    # db.session.delete(person)
-    # db.session.commit()
-    return jsonify({'message': 'Person deleted successfully'})
+    try:
+        # Establish a connection to the SQLite database
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+
+        # Check if the person with the specified user_id exists
+        cursor.execute("SELECT id FROM Persons WHERE id = ?", (user_id,))
+        person = cursor.fetchone()
+
+        if person:
+            # Delete the person from the database
+            cursor.execute("DELETE FROM Persons WHERE id = ?", (user_id,))
+            connection.commit()
+            return jsonify({'message': 'Person deleted successfully'}), 200
+        else:
+            return jsonify({'message': 'Person not found'}), 404
+
+    except sqlite3.Error as e:
+        # Handle any potential database errors here
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        # Make sure to close the database connection when done
+        connection.close()
 
 def __init__(self, name, age):
         self.name = name
