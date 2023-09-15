@@ -16,7 +16,7 @@ app = Flask(__name__)
 def create_person():
     data = request.json
     name = data["name"]
-    age=data["age"]
+    age = data["age"]
     with sqlite3.connect("database.db") as users:
          cursor = users.cursor()
          cursor.execute("INSERT INTO Persons \
@@ -25,16 +25,45 @@ def create_person():
     return jsonify({'message': 'Person created successfully'}), 201
 
 # Read a person by ID
+# @app.route('/api/<int:user_id>', methods=['GET'])
+# def get_person(user_id):
+#     # id = int(user_id)
+#     connect = sqlite3.connect('database.db')
+#     cursor = connect.cursor()
+#     cursor.execute("SELECT cast(id as integer) FROM Persons WHERE id = ?", (user_id,))
+#     person = cursor.fetchone()
+#     return jsonify({"person": person})
+#     # print(person)
+#     # result = list(map(convertListToObject, person))
+#     # return jsonify({"result": 'result'}), 200
+
 @app.route('/api/<int:user_id>', methods=['GET'])
 def get_person(user_id):
-    # id = int(user_id)
-    connect = sqlite3.connect('database.db')
-    cursor = connect.cursor()
-    cursor.execute("SELECT cast(id as integer) FROM Persons WHERE id = id")
-    person = cursor.fetchall()
-    print(person)
-    # result = list(map(convertListToObject, person))
-    return jsonify({"result": 'result'}), 200
+    try:
+        # Establish a connection to the SQLite database
+        connection = sqlite3.connect('database.db')
+        cursor = connection.cursor()
+
+        # Use a parameterized query to fetch the person's data by user_id
+        cursor.execute("SELECT id, name, age FROM Persons WHERE id = ?", (user_id,))
+        person = cursor.fetchone()
+
+        # Check if a person with the given user_id was found
+        if person:
+            # Create a dictionary to represent the person's data
+            person_dict = {
+                "id": person[0],
+                "name": person[1],
+                "age": person[2]
+            }
+            return jsonify({"person": person_dict}), 200
+        else:
+            return jsonify({"message": "Person not found"}), 404
+        
+    except sqlite3.Error as e:
+        # Handle any potential database errors here
+        return jsonify({"error": str(e)}), 500
+
 
 # Get all persons
 @app.route('/api/', methods=['GET'])
