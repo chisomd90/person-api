@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from model import db, Person
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.sqlite3'
 db.init_app(app)
 
 # Create a new person
@@ -19,6 +19,13 @@ def create_person():
 def get_person(user_id):
     person = Person.query.get_or_404(user_id)
     return jsonify({'name': person.name, 'age': person.age})
+
+# # Read a person by ID
+# @app.route('/api/', methods=['GET'])
+# def get_all_persons():
+#     person = Person.query.filterBy().
+#     print(person)
+#     return jsonify({'test': 'true'})
 
 # Update a person by ID
 @app.route('/api/<int:user_id>', methods=['PUT'])
@@ -39,8 +46,6 @@ def delete_person(user_id):
     return jsonify({'message': 'Person deleted successfully'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
     with app.app_context():
         db.create_all()
     app.run(debug=True)
