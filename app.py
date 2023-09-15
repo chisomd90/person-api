@@ -1,9 +1,18 @@
 from flask import Flask, request, jsonify
-from model import db, Person
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+
+class Person(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    age = db.Column(db.Integer)
 
 # Create a new person
 @app.route('/api', methods=['POST'])
@@ -20,12 +29,12 @@ def get_person(user_id):
     person = Person.query.get_or_404(user_id)
     return jsonify({'name': person.name, 'age': person.age})
 
-# # Read a person by ID
-# @app.route('/api/', methods=['GET'])
-# def get_all_persons():
-#     person = Person.query.filterBy().
-#     print(person)
-#     return jsonify({'test': 'true'})
+# Read a person by ID
+@app.route('/api/', methods=['GET'])
+def get_all_persons():
+    person = Person.query
+    print(person)
+    return jsonify({'test': 'true'})
 
 # Update a person by ID
 @app.route('/api/<int:user_id>', methods=['PUT'])
@@ -44,6 +53,10 @@ def delete_person(user_id):
     db.session.delete(person)
     db.session.commit()
     return jsonify({'message': 'Person deleted successfully'})
+
+def __init__(self, name, age):
+        self.name = name
+        self.age = age
 
 if __name__ == '__main__':
     with app.app_context():
