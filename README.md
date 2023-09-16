@@ -23,11 +23,11 @@ The Person API is a simple RESTful API that allows you to perform CRUD (Create, 
 
 Before you begin, ensure you have the following:
 
-- Python 3.6+
+- Python 3.10+
 - pip (Python package manager)
-- [Flask](https://flask.palletsprojects.com/en/2.1.x/)
+- [Flask](https://flask.palletsprojects.com/en/2.2.x/)
 - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/3.x/)
-- MySQL (or an alternative database, based on your choice)
+- [SQLite] (or an alternative database, based on your choice)
 
 ## Getting Started
 
@@ -47,9 +47,6 @@ Ensure your database is set up and running.
 Run the following command to create the database tables:
 
 
-python create_db.py ------ Start the API server:
-
-
 python app.py -------- The API should now be running locally at http://localhost:5000.
 
 ### API Endpoints
@@ -62,34 +59,43 @@ Description: Create a new person with the given name.
 Request Body: JSON data containing person details (name, age, email).
 
 Example Request: 
-  curl -X POST http://localhost:5000/api/John%20Doe -H "Content-Type: application/json" -d 
+  curl -X POST http://localhost:5000/api -H "Content-Type: application/json" -d 
   ```json
   '{
   "name": "Chisom Daniel",
   "age": 30,
 }'
 ```
+## Retreive all persons
+Endpoint: GET /api/
+
+Description: Retrieve details of all persons in the database.
+
+Example Request:
+  curl http://localhost:5000/api/
+
 
   ## Retreive a person
 Endpoint: GET /api/<int:user_id>
 
-Description: Retrieve details of a person with the given name.
+Description: Retrieve details of a person with the given user id.
 
 Example Request:
-  curl http://localhost:5000/api/John%20Doe
+  curl http://localhost:5000/api/<int:user_id>
+  
 
   ## Update a person
 Endpoint: PUT /api/<int:user_id>
 
 Description: Update details of a person with the given name.
-
-Request Body: JSON data containing updated person details (age, email).
+Request Body: JSON data containing updated person details (age, id, email).
 
 Example Request:
-   curl -X PUT http://localhost:5000/api/John%20Doe -H "Content-Type: application/json" -d 
+   curl -X PUT http://localhost:5000/api/<int:user_id> -H "Content-Type: application/json" -d 
    ```json
    '{
        "name": "john doe",
+       "id": <int:user_id>,
        "age": 35,
     }'
 ```
@@ -99,7 +105,7 @@ Endpoint: DELETE /api/<int:user_id>
 Description: Delete a person with the given name.
 
 Example Request:
-   curl -X DELETE http://localhost:5000/api/John%20Doe
+   curl -X DELETE http://localhost:5000/api/<int:user_id>,
 
 
 ### Testing the API

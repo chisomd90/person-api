@@ -56,6 +56,7 @@ HTTP Status Code: 200 (OK) on success
 ```json
   {
     "name": string,
+    "id": numbers,
     "age": integer
 }
 ```
@@ -87,16 +88,48 @@ HTTP Status Code: 200 (OK) on success
 }
 ```
 
-### Delete a Person (DELETE /api/string:name)
+### Delete a Person (DELETE /api/<int:user_id>)
 **Request Format**
 
 HTTP Method: DELETE
-URL: '/api/<int:user_id>'>
+URL: '/api/<int:user_id>'
 
 **Response Format**
-
+```json
+{
+    "message": "Person deleted successfully"
+}
+```
 HTTP Status Code: 204 (No Content) on success
-No response body
+
+
+### Retrieve all users created (GET '/api/')
+**Request Format**
+
+HTTP Method: GET
+URL: '/api/'>
+
+**Response Format**
+```json
+{
+    "name": "chisom Daniel",
+    "id": 1,
+    "age": 30,
+}
+{
+    "name": "John Doe",
+    "id": 2,
+    "age": 30,
+}
+{
+    "name": "John daniel",
+    "id": 3,
+    "age": 30,
+}
+```
+HTTP Status Code: 204 on success
+ALL PERSONS CREATED IN JSON FORMAT
+
 
 ## Sample API Usage
 
@@ -131,6 +164,7 @@ Host: localhost:5000
 ```json
 {
     "name": "John Doe",
+    "id": <int:user_id>,
     "age": 30,
 }
 ```
@@ -145,6 +179,7 @@ Content-Type: application/json
 ```json
 {
     "name": "john doe",
+    "id": <int:user_id>,
     "age": 35,
 }
 ```
@@ -163,7 +198,38 @@ DELETE /api/<int:user_id> HTTP/1.1
 Host: localhost:5000
 
 **Response**
-No response body (HTTP Status Code: 204 No Content)
+```json
+{
+    "message": "Person deleted successfully"
+}
+```
+(HTTP Status Code: 204 No Content)
+
+
+**Retrieving all Persons**
+**Request**
+
+GET /api/ HTTP/1.1
+Host: localhost:5000
+
+**Response**
+```json
+{
+    "name": "chisom Daniel",
+    "id": 1,
+    "age": 30,
+}
+{
+    "name": "John Doe",
+    "id": 2,
+    "age": 30,
+}
+{
+    "name": "John daniel",
+    "id": 3,
+    "age": 30,
+}
+```
 
 
 
@@ -178,30 +244,28 @@ No response body (HTTP Status Code: 204 No Content)
 
 To set up and deploy the API locally or on a server, follow these steps:
 
-Clone the repository to your local machine:
+## Clone the repository to your local machine:
 ```bash
 git clone https://github.com/yourusername/person-api.git
 ```
 
-Navigate to the project directory:
+## Navigate to the project directory:
 ```bash
 cd person-api
 ```
 
-Install the required Python packages:
+## Install the required Python packages:
 ```bash
 pip install -r requirements.txt
 ```
-Configure the database settings in config.py.
-
-
-Create the database tables:
+ ## Configure the database settings in app.py.
 ```bash
-python create_db.py
+connect = sqlite3.connect('database.db')
+connect.execute(
+    'CREATE TABLE IF NOT EXISTS Persons (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age TEXT)')
 ```
 
-
-Start the API server:
+## Start the API server:
 ```bash
 python app.py
 ```
