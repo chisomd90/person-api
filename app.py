@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from utils import convertListToObject
 import sqlite3
 

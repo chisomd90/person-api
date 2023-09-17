@@ -27,8 +27,7 @@ Welcome to the documentation for the Person API. This API allows you to perform 
 
   ```json
   {
-    "name": string,
-    "age": integer
+    "name": string
   }
 
 **Response Format**
@@ -38,7 +37,7 @@ HTTP Status Code: 201 (Created) on success
 **JSON Response Body:**
    ```json
   {
-    "message": "Person created successfully"
+    "message": "Person created successfully, 'id': last_id"
   }
    ```
 ### Retrieve a Person (GET '/api/<int:user_id>')
@@ -57,7 +56,6 @@ HTTP Status Code: 200 (OK) on success
   {
     "name": string,
     "id": numbers,
-    "age": integer
 }
 ```
 ### Update a Person (PUT '/api/<int:user_id>')
@@ -73,8 +71,7 @@ Content-Type: application/json
 **Request Body:**
 ```json
 {
-    "name": string,
-    "age": integer
+    "name": string
 }
 ```
 **Response Format**
@@ -113,18 +110,15 @@ URL: '/api/'>
 ```json
 {
     "name": "chisom Daniel",
-    "id": 1,
-    "age": 30,
+    "id": 1
 }
 {
     "name": "John Doe",
-    "id": 2,
-    "age": 30,
+    "id": 2
 }
 {
     "name": "John daniel",
-    "id": 3,
-    "age": 30,
+    "id": 3
 }
 ```
 HTTP Status Code: 204 on success
@@ -142,15 +136,14 @@ Host: localhost:5000
 Content-Type: application/json
 ```json
 {
-    "name": "John Doe",
-    "age": 30
+    "name": "John Doe"
 }
 ```
 
 **Response**
 ```json
 {
-    "message": "Person created successfully"
+    "message": "Person created successfully, 'id': last_id"
 }
 ```
 
@@ -164,8 +157,7 @@ Host: localhost:5000
 ```json
 {
     "name": "John Doe",
-    "id": <int:user_id>,
-    "age": 30,
+    "id": <int:user_id>
 }
 ```
 
@@ -179,8 +171,7 @@ Content-Type: application/json
 ```json
 {
     "name": "john doe",
-    "id": <int:user_id>,
-    "age": 35,
+    "id": <int:user_id>
 }
 ```
 **Response**
@@ -216,18 +207,15 @@ Host: localhost:5000
 ```json
 {
     "name": "chisom Daniel",
-    "id": 1,
-    "age": 30,
+    "id": 1
 }
 {
     "name": "John Doe",
-    "id": 2,
-    "age": 30,
+    "id": 2
 }
 {
     "name": "John daniel",
-    "id": 3,
-    "age": 30,
+    "id": 3
 }
 ```
 

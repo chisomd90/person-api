@@ -62,8 +62,7 @@ Example Request:
   curl -X POST http://localhost:5000/api -H "Content-Type: application/json" -d 
   ```json
   '{
-  "name": "Chisom Daniel",
-  "age": 30,
+  "name": "Chisom Daniel"
 }'
 ```
 ## Retreive all persons
@@ -95,8 +94,7 @@ Example Request:
    ```json
    '{
        "name": "john doe",
-       "id": <int:user_id>,
-       "age": 35,
+       "id": <int:user_id>
     }'
 ```
   ## Delete a person
